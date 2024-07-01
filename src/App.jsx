@@ -3,12 +3,11 @@ import { useEffect } from 'react'
 import { nanoid } from "nanoid"
 import MainPage from './components/MainPage'
 import Quiz from "./components/Quiz"
-import data from "./components/data"
 export default function App() {
 
   const [displayMain, setDisplayMain] = useState(true);
   const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState(data.map(item => ({ id: item.id, option: "", })))
+  const [answers, setAnswers] = useState([])
   const [submitted, setSubmitted] = useState(false)
   const quizQuestion = questions.map((question, index) => {return(
   <Quiz key={nanoid()} id={question.id} quizdata={question} selected={answers[index].option} changeAnswer={changeAnswer} submitted={submitted} />)})
@@ -26,7 +25,7 @@ export default function App() {
     }
   }
   function resetQuiz() {
-    setAnswers(data.map(item => ({ id: item.id, option: ""})))
+    setAnswers(questions.map(item => ({ id: item.id, option: ""})))
     setSubmitted(false)
     setScore(5);
   }
@@ -52,21 +51,38 @@ export default function App() {
     setSubmitted(true);
   }
 useEffect(() => {
-  const Data = data;
-  const questionsArray = data.map((item) => {
-    let correct = item.correctAnswer;
-    let incorrect = item.incorrectAnswers;
-    const randomIndex = Math.floor(Math.random() * 4);
-    const newArray = incorrect.toSpliced(Math.floor(Math.random() * 4), 0, correct);
-    return {
-      id: item.id,
-      question: item.question.text,
-      correctAnswer: correct,
-      options: newArray,
-    }
-  })
-  setQuestions(questionsArray);
+  async function fetchData()
+  {
+    try {
+      let response = await fetch("https://the-trivia-api.com/v2/questions");
 
+      let data = await response.json();
+      console.log(data)
+      return data;
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
+  }
+  }  
+  fetchData().then((res) => {
+    const data=res.slice(0,4);
+    const questionsArray = data.map((item) => {
+      let correct = item.correctAnswer;
+      let incorrect = item.incorrectAnswers;
+      const randomIndex = Math.floor(Math.random() * (incorrect.length + 1));
+      const options = [...incorrect];
+      options.splice(randomIndex, 0, correct);
+
+      return {
+        id: item.id,
+        question: item.question.text,
+        correctAnswer: correct,
+        options: options,
+      };
+    });
+
+    setQuestions(questionsArray);
+    setAnswers(questionsArray.map((item) => ({ id: item.id, option: '' })));
+  });
 }, [])
 
 return (

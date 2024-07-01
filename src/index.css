@@ -63,24 +63,23 @@ h3
   align-items: center;
   justify-content: center;
   row-gap: 10px;;
+  margin-top:10px;
+  margin-bottom: 10px;;
 }
 .question{font-size:16px;
   margin-bottom:13px;
-  /* max-width:650px; */
-  /* text-wrap: wrap; */
 }
-.options
-{
-  display:grid;
-  grid: auto / repeat(4,1fr);
-  grid-column-gap:13px;
+.options {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  column-gap: 20px;
 }
 [class*="option-"]
 {
   border:1px solid #293264;
   border-radius:8px;
-  min-width:200px;
-
   background-color:transparent;
   color:#293264;
   font-family: Karla;

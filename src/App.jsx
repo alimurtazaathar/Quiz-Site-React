@@ -87,8 +87,9 @@ useEffect(() => {
 
 return (
   <>
-    {displayMain ? <MainPage startQuiz={startQuiz} /> : quizQuestion}
-    {!displayMain && <form onSubmit={submitAnswers}>{submitted && <h3 className="score">Your score is:{score}/5</h3>}<button type="submit" className="submit-btn" onClick={submitAnswers}>{submitted ? "Reset" : "Check Answers"}</button></form>}
+    {displayMain ? <MainPage startQuiz={startQuiz} /> :<form className="quiz-form" onSubmit={submitAnswers}>
+       {quizQuestion}
+      <div className="score-container">{submitted && <h3 className="score">Your score is:{score}/5</h3>}<button type="submit" className="submit-btn" onClick={submitAnswers}>{submitted ? "Reset" : "Check Answers"}</button></div></form>}
   </>
 )
 

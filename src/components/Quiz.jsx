@@ -44,9 +44,9 @@ export default function Quiz(props) {
   return (
     <div className="quiz-container">
       <h3 className="question">{props.quizdata.question}</h3>
-      <form className="options">
+      <div className="options">
         {optionsArray}
-      </form>
+      </div>
       <hr />
     </div>)
 }
